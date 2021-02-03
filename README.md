@@ -2,7 +2,7 @@
 
 This repository contains the backend part of the localsearch home assignment.
 
-# Building and running the code
+### Building and running the code
 
 To build and run the backend app, you should navigate your terminal to the following path
 
