@@ -33,7 +33,7 @@ func (c *Context) DecodeBody(dst interface{}) error {
 
 // Encode encodes and writes the response body.
 func (c *Context) Encode(src interface{}) error {
-	return json.NewEncoder(c.ResponseWriter).Encode(src)
+	return json.NewEncoder(c.ResponseWriter).Encode(ResponseFromData(src))
 }
 
 // Error is a standardized error response that uses application's default codec!

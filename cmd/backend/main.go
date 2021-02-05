@@ -23,7 +23,7 @@ func main() {
 	izap.Logger.Info("Backend is starting", zap.String("env file", *envFile))
 
 	if *envFile != "" {
-		err := godotenv.Load("cmd/backend/" + *envFile)
+		err := godotenv.Load(*envFile)
 		if err != nil {
 			log.Fatal(err)
 		}

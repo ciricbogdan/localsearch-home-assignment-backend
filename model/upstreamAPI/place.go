@@ -1,4 +1,4 @@
-package model
+package upstreamAPI
 
 // Place defines the place model
 type Place struct {
