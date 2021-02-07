@@ -1,20 +1,17 @@
 package main
 
 import (
-	"errors"
 	"flag"
-	"fmt"
 	"github.com/ciricbogdan/localsearch-home-assignment-backend/backend"
 	izap "github.com/ciricbogdan/localsearch-home-assignment-backend/infra/zap"
 	"github.com/joho/godotenv"
 	"go.uber.org/zap"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
-var envFile = flag.String("env", "", "mandatory flag with the .env file in the current directory")
+var envFile = flag.String("env", "", "mandatory flag for the name of the env file")
 
 func main() {
 
@@ -25,22 +22,22 @@ func main() {
 	if *envFile != "" {
 		err := godotenv.Load(*envFile)
 		if err != nil {
-			log.Fatal(err)
+			izap.Logger.Fatal("Env file error", zap.Error(err))
 		}
 	} else {
-		log.Fatal(errors.New("-env flag is mandatory"))
+		izap.Logger.Fatal("Env file is mandatory")
 	}
 
 	// Init the app
 	app, err := backend.New()
 	if err != nil {
-		log.Fatal(err)
+		izap.Logger.Fatal("Backend initialization", zap.Error(err))
 	}
 
 	// Start the app
 	err = app.Run()
 	if err != nil {
-		log.Fatal(err)
+		izap.Logger.Fatal("Backend start", zap.Error(err))
 	}
 
 	// If the app is shut down manually we catch it to gracefully stop the app
@@ -50,5 +47,5 @@ func main() {
 	<-signals
 
 	app.Stop()
-	fmt.Println("Stopped")
+	izap.Logger.Info("Backend has stoppend")
 }

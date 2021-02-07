@@ -36,7 +36,7 @@ func (c *Context) Encode(src interface{}) error {
 	return json.NewEncoder(c.ResponseWriter).Encode(ResponseFromData(src))
 }
 
-// Error is a standardized error response that uses application's default codec!
+// Error is a standardized error response
 func (c *Context) Error(status int, err error, code string) error {
 	c.WriteHeader(status)
 	return json.NewEncoder(c.ResponseWriter).Encode(ErrorResponse(err, code))

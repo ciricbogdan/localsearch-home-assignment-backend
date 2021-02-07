@@ -1,10 +1,12 @@
 package backend
 
 import (
+	"fmt"
 	"github.com/ciricbogdan/localsearch-home-assignment-backend/http/client"
 	"github.com/ciricbogdan/localsearch-home-assignment-backend/http/server"
+	izap "github.com/ciricbogdan/localsearch-home-assignment-backend/infra/zap"
 	"github.com/ciricbogdan/localsearch-home-assignment-backend/services"
-	"log"
+	"go.uber.org/zap"
 	"os"
 )
 
@@ -17,8 +19,8 @@ type App struct {
 // New retunes a new instance of the Backend application
 func New() (*App, error) {
 
-	// get address from env
-	addr := os.Getenv("host") + ":" + os.Getenv("port")
+	// get address from env file
+	addr := fmt.Sprintf("%v:%v", os.Getenv("host"), os.Getenv("port"))
 
 	// init http server
 	s, err := server.New(server.WithAddr(addr))
@@ -66,7 +68,7 @@ func (a *App) Stop() error {
 	// stop the http server
 	err := a.Server.Stop()
 	if err != nil {
-		log.Fatal(err)
+		izap.Logger.Fatal("Backend http server stop", zap.Error(err))
 	}
 
 	return nil

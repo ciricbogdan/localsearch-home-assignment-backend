@@ -44,16 +44,6 @@ func PlaceFromUpstreamAPI(place upstreamAPI.Place) Place {
 		if rangeStart == "" {
 			rangeStart = day
 			rangeEnd = day
-			intervals, ok := daysMap[day]
-			if ok {
-				for _, timeInterval := range intervals {
-					previousTimeIntervals = append(previousTimeIntervals, TimeIntervalFromUpstreamAPI(timeInterval))
-				}
-			} else {
-				previousTimeIntervals = append(previousTimeIntervals, TimeInterval{Type: "CLOSED"})
-			}
-
-			continue
 		}
 
 		intervals, ok := daysMap[day]
@@ -64,6 +54,13 @@ func PlaceFromUpstreamAPI(place upstreamAPI.Place) Place {
 			}
 		} else {
 			currentTimeIntervals = append(currentTimeIntervals, TimeInterval{Type: "CLOSED"})
+		}
+
+		// if there are not previous time intervals then continue
+		if len(previousTimeIntervals) == 0 {
+			previousTimeIntervals = currentTimeIntervals
+
+			continue
 		}
 
 		// compare intervals
@@ -111,6 +108,7 @@ func PlaceFromUpstreamAPI(place upstreamAPI.Place) Place {
 	return result
 }
 
+// TimeIntervalFromUpstreamAPI converts timeInteval from the upstreamAPI model to the uimodel
 func TimeIntervalFromUpstreamAPI(timeInterval upstreamAPI.TimeInterval) TimeInterval {
 	return TimeInterval{
 		Start: timeInterval.Start,
